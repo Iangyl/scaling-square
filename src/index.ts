@@ -82,7 +82,7 @@ function firstSplit(polygon: Polygon): Polygon[] {
 
 // Рекурсивний поділ полігонів до досягнення заданої глибини
 function splitPolygon(polygons: Polygon[]): Polygon[] {
-  if (recursionDepth >= MAX_DEPTH) return polygons;
+  if (recursionDepth >= MAX_DEPTH || polygons.length >= 50) return polygons;
 
   recursionDepth++;
   let newPolygons: Polygon[] = [];
@@ -200,7 +200,7 @@ const colors = finalPolygons.map(() => `hsl(${Math.random() * 360}, 70%, 70%)`);
 const mainCenter = getPolygonCenter(square);
 
 // Поріг, на якому сусідній вплив працює (у пікселях)
-const neighborThreshold = 1;
+const neighborThreshold = 200;
 // Ваги для обох ефектів (можна підігнати)
 const weightMain = 0.01;
 const weightNeighbor = 0.01;
