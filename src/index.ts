@@ -1,3 +1,14 @@
+// Функція для масштабування полігона відносно його центру та переміщення його до заданого центру
+function scaleAndCenterPolygon(polygon: Polygon, scale: number, newCenter: Point): Polygon {
+  // Обчислюємо центр початкового полігона
+  const polyCenter = getPolygonCenter(polygon);
+  // Масштабуємо кожну точку та переміщаємо її, щоб центр полігона став newCenter
+  return polygon.map(p => ({
+    x: newCenter.x + (p.x - polyCenter.x) * scale,
+    y: newCenter.y + (p.y - polyCenter.y) * scale
+  }));
+}
+
 const canvas = document.createElement('canvas');
 const mainSquare = document.getElementById('main-square');
 canvas.width = 1000;
@@ -180,12 +191,20 @@ function drawPolygon(polygon: Polygon, color: string) {
 }
 
 // Визначення початкового квадрата з чотирьох точок
-const square: Polygon = [
+const originalSquare: Polygon = [
   { x: 250, y: 0 },
   { x: 750, y: 0 },
   { x: 750, y: 500 },
   { x: 250, y: 500 },
 ];
+
+// Центр канвасу
+const canvasCenter = { x: canvas.width / 2, y: canvas.height / 2 };
+// Масштабний коефіцієнт: зменшуємо розмір у 1.15 раз (тобто масштаб = 1/1.15)
+const scaleFactor = 1 / 1.15;
+
+// Масштуємо та центруємо основний полігон
+const square: Polygon = scaleAndCenterPolygon(originalSquare, scaleFactor, canvasCenter);
 
 // Перший поділ
 const initialPolygons = firstSplit(square);
